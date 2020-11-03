@@ -64,6 +64,9 @@ TextureInfo read_texture_info(AssetFile const& file) {
 }
 
 void unpack_texture(TextureInfo const& info, AssetFile const& file, std::byte* dst) {
+	memcpy(dst, file.binary_blob.data(), file.binary_blob.size());
+	return;
+
 	// Decompress data directly into destination buffer
 	LZ4_decompress_safe(reinterpret_cast<const char*>(file.binary_blob.data()), reinterpret_cast<char*>(dst), 
 		file.binary_blob.size(), info.byte_size);
@@ -85,6 +88,12 @@ AssetFile pack_texture(TextureInfo const& info, std::byte* pixel_data) {
 	file.type[2] = 'E';
 	file.type[3] = 'X';
 	file.version = itex_version;
+	file.metadata_json = json.dump(0, "");
+
+	// No compression
+	file.binary_blob.resize(info.byte_size);
+	memcpy(file.binary_blob.data(), pixel_data, file.binary_blob.size());
+	return file;
 
 	const int compress_staging_size = LZ4_compressBound(info.byte_size);
 	file.binary_blob.resize(compress_staging_size);
@@ -92,7 +101,6 @@ AssetFile pack_texture(TextureInfo const& info, std::byte* pixel_data) {
 		info.byte_size, compress_staging_size);
 	file.binary_blob.resize(compressed_size);
 
-	file.metadata_json = json.dump(0, "");
 
 	return file;
 }
