@@ -11,3 +11,5 @@ target_include_directories(assetlib PRIVATE "external/SimpleJSON" "external/lz4/
 add_library(lz4 STATIC)
 target_sources(lz4 PRIVATE "external/lz4/lib/lz4.c")
 target_include_directories(lz4 PRIVATE "external/lz4/lib")
+
+target_link_libraries(assetlib PRIVATE lz4)
