@@ -22,7 +22,7 @@ bool save_binary_file(std::string_view path, AssetFile const& file) {
 	// Write json
 	out.write(file.metadata_json.data(), json_length);
 	// Write binary blob
-	out.write(reinterpret_cast<const char*>(file.binary_blob.data()), binary_length);
+	out.write(file.binary_blob.data(), binary_length);
 
 	return true;
 }
@@ -41,7 +41,7 @@ bool load_binary_file(std::string_view path, AssetFile& file) {
 	file.binary_blob.resize(binary_length);
 
 	in.read(file.metadata_json.data(), json_length);
-	in.read(reinterpret_cast<char*>(file.binary_blob.data()), binary_length);
+	in.read(file.binary_blob.data(), binary_length);
 	return true;
 }
 

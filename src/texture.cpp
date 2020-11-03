@@ -63,16 +63,16 @@ TextureInfo read_texture_info(AssetFile const& file) {
 	return info;
 }
 
-void unpack_texture(TextureInfo const& info, AssetFile const& file, std::byte* dst) {
+void unpack_texture(TextureInfo const& info, AssetFile const& file, void* dst) {
 	memcpy(dst, file.binary_blob.data(), file.binary_blob.size());
 	return;
 
 	// Decompress data directly into destination buffer
-	LZ4_decompress_safe(reinterpret_cast<const char*>(file.binary_blob.data()), reinterpret_cast<char*>(dst), 
+	LZ4_decompress_safe(file.binary_blob.data(), reinterpret_cast<char*>(dst), 
 		file.binary_blob.size(), info.byte_size);
 }
 
-AssetFile pack_texture(TextureInfo const& info, std::byte* pixel_data) {
+AssetFile pack_texture(TextureInfo const& info, void* pixel_data) {
 	AssetFile file;
 
 	json::JSON json;

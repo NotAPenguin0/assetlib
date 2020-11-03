@@ -19,7 +19,7 @@ struct AssetFile {
 	// json description of the asset
 	std::string metadata_json;
 	// Binary buffer with all the raw data
-	std::vector<uint8_t> binary_blob;
+	std::vector<char> binary_blob;
 };
 
 bool save_binary_file(std::string_view path, AssetFile const& file);
