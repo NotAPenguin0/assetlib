@@ -67,7 +67,6 @@ void unpack_texture(TextureInfo const& info, AssetFile const& file, void* dst) {
 	// Decompress data directly into destination buffer
 	int ret = LZ4_decompress_safe(file.binary_blob.data(), reinterpret_cast<char*>(dst), 
 		file.binary_blob.size(), info.byte_size);
-	assert(ret >= 0 && "decompression failed");
 }
 
 AssetFile pack_texture(TextureInfo const& info, void* pixel_data) {
@@ -89,10 +88,9 @@ AssetFile pack_texture(TextureInfo const& info, void* pixel_data) {
 	file.metadata_json = json.dump(0, "");
 
 	// No compression
-	file.binary_blob.resize(info.byte_size);
 	const int compress_staging_size = LZ4_compressBound(info.byte_size);
 	file.binary_blob.resize(compress_staging_size);
-	const int compressed_size = LZ4_compress_default(reinterpret_cast<const char*>(pixel_data), reinterpret_cast<char*>(file.binary_blob.data()), 
+	const int compressed_size = LZ4_compress_default(reinterpret_cast<const char*>(pixel_data), file.binary_blob.data(), 
 		info.byte_size, compress_staging_size);
 	file.binary_blob.resize(compressed_size);
 

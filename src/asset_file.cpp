@@ -28,8 +28,10 @@ bool save_binary_file(std::string_view path, AssetFile const& file) {
 }
 
 bool load_binary_file(std::string_view path, AssetFile& file) {
-	std::ifstream in(path.data(), std::ios::in, std::ios::binary);
+	std::ifstream in(path.data(), std::ios::in | std::ios::binary);
 	if (!in.good()) return false;
+
+	in.seekg(0);
 
 	in.read(file.type, sizeof(file.type));
 	in.read(reinterpret_cast<char*>(&file.version), sizeof(uint32_t));
