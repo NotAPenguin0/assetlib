@@ -4,6 +4,20 @@
 
 namespace assetlib {
 
+std::string compression_to_string(CompressionMode compression) {
+	switch (compression) {
+	case CompressionMode::None:
+		return "None";
+	case CompressionMode::LZ4:
+		return "LZ4";
+	}
+}
+
+CompressionMode parse_compression_mode(std::string_view compression) {
+	if (compression == "LZ4") { return CompressionMode::LZ4; }
+	return CompressionMode::None;
+}
+
 bool save_binary_file(std::string_view path, AssetFile const& file) {
 	std::ofstream out(path.data(), std::ios::out | std::ios::binary);
 	if (!out.good()) return false;

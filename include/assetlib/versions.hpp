@@ -19,18 +19,18 @@ inline constexpr uint32_t pack_version(uint8_t major, uint8_t minor, uint8_t pat
 }
 
 inline constexpr uint8_t major_version(uint32_t version) {
-	return version & 0xFF0000;
+	return version >> 16;
 }
 
 inline constexpr uint8_t minor_version(uint32_t version) {
-	return version & 0xFF00;
+	return version >> 8;
 }
 
 inline constexpr uint8_t patch_version(uint32_t version) {
 	return version & 0xFF;
 }
 
-constexpr uint32_t itex_version = pack_version(0, 0, 2);
+constexpr uint32_t itex_version = pack_version(1, 0, 0);
 constexpr uint32_t mesh_version = pack_version(0, 0, 1);
 
 }

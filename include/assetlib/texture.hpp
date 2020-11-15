@@ -12,15 +12,16 @@ enum class TextureFormat {
 
 enum class ColorSpace {
 	Unknown = 0,
-	SRGB,
+	sRGB,
 	RGB
 };
 
 struct TextureInfo {
 	uint64_t byte_size = 0;
 	TextureFormat format = TextureFormat::Unknown;
-	ColorSpace color_space = ColorSpace::Unknown;
+	CompressionMode compression;
 	uint32_t extents[3]{ 0, 0, 0 };
+	uint32_t mip_levels = 0;
 };
 
 // Read texture metadata from binary file

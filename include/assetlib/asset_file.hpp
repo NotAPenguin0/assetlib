@@ -8,6 +8,14 @@
 
 namespace assetlib {
 
+enum class CompressionMode {
+	None,
+	LZ4
+};
+
+std::string compression_to_string(CompressionMode compression);
+CompressionMode parse_compression_mode(std::string_view compression);
+
 struct AssetFile {
 	// 4-byte header indicating the asset type.
 	// Possible values are:

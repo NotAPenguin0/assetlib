@@ -1,6 +1,6 @@
 [submodule "external/SimpleJSON"]
 	path = external/SimpleJSON
-	url = https://github.com/nbsdx/SimpleJSON
+	url = https://github.com/NotAPenguin0/SimpleJSON
 [submodule "external/lz4"]
 	path = external/lz4
 	url = https://github.com/lz4/lz4
