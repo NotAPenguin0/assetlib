@@ -85,6 +85,7 @@ AssetFile pack_texture(TextureInfo const& info, void* pixel_data) {
 	json["extents"]["y"] = info.extents[1];
 	json["byte_size"] = info.byte_size;
 	json["mip_levels"] = info.mip_levels;
+	json["compression_mode"] = compression_to_string(info.compression);
 
 	// File header
 	file.type[0] = 'I';
