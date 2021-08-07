@@ -85,7 +85,6 @@ AssetFile pack_texture(TextureInfo const& info, void* pixel_data) {
 	json["extents"]["y"] = info.extents[1];
 	json["byte_size"] = info.byte_size;
 	json["mip_levels"] = info.mip_levels;
-	json["compression_mode"] = compression_to_string(info.compression);
 
 	// File header
 	file.type[0] = 'I';
@@ -93,7 +92,6 @@ AssetFile pack_texture(TextureInfo const& info, void* pixel_data) {
 	file.type[2] = 'E';
 	file.type[3] = 'X';
 	file.version = itex_version;
-	file.metadata_json = json.dump(0, "");
 
 	CompressionMode compression = info.compression;
 	if (compression == CompressionMode::LZ4) {
@@ -118,6 +116,8 @@ AssetFile pack_texture(TextureInfo const& info, void* pixel_data) {
 	}
 
 	json["compression_mode"] = compression_to_string(compression);
+
+	file.metadata_json = json.dump(0, "");
 
 	return file;
 }
