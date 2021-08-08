@@ -1,10 +1,11 @@
 #pragma once
 
 #include <string>
-#include <string_view>
 #include <vector>
 #include <cstdint>
 #include <assetlib/versions.hpp>
+
+#include <plib/stream.hpp>
 
 namespace assetlib {
 
@@ -30,7 +31,7 @@ struct AssetFile {
 	std::vector<char> binary_blob;
 };
 
-bool save_binary_file(std::string_view path, AssetFile const& file);
-bool load_binary_file(std::string_view path, AssetFile& file);
+bool save_binary_file(plib::binary_output_stream& out, AssetFile const& file);
+bool load_binary_file(plib::binary_input_stream& in, AssetFile& file);
 
 }

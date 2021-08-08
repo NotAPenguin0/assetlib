@@ -63,9 +63,9 @@ void unpack_mesh(MeshInfo const& info, AssetFile const& file, void* dst_vertices
 	const char* src_index_pointer = file.binary_blob.data() + info.index_binary_offset;
 	if (info.compression == CompressionMode::LZ4) {
 		// info.index_binary_offset is the lenght of the vertex data in the compressed binary stream
-		LZ4_decompress_safe(src_vertex_pointer, reinterpret_cast<char*>(dst_vertices), 
+		LZ4_decompress_safe(src_vertex_pointer, reinterpret_cast<char*>(dst_vertices),
 			info.index_binary_offset, info.vertex_count * vertex_byte_size(info.format));
-		LZ4_decompress_safe(src_index_pointer, reinterpret_cast<char*>(dst_indices), 
+		LZ4_decompress_safe(src_index_pointer, reinterpret_cast<char*>(dst_indices),
 			file.binary_blob.size() - info.index_binary_offset, info.index_count * bytes_per_index);
 	}
 	else if (info.compression == CompressionMode::None) {
@@ -91,7 +91,8 @@ static bool validate_mesh_info(MeshInfo const& info) {
 // Packs raw mesh data into a binary asset file ready to save to disk
 AssetFile pack_mesh(MeshInfo const& info, void* vertices, void* indices) {
 	AssetFile file;
-	
+	file.version = mesh_version;
+
 	assert(validate_mesh_info(info) && "Invalid mesh description");
 
 	json::JSON json;

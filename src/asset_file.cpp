@@ -1,6 +1,6 @@
 #include <assetlib/asset_file.hpp>
 
-#include <fstream>
+#include <plib/stream.hpp>
 
 namespace assetlib {
 
@@ -18,20 +18,17 @@ CompressionMode parse_compression_mode(std::string_view compression) {
 	return CompressionMode::None;
 }
 
-bool save_binary_file(std::string_view path, AssetFile const& file) {
-	std::ofstream out(path.data(), std::ios::out | std::ios::binary);
-	if (!out.good()) return false;
-
+bool save_binary_file(plib::binary_output_stream& out, AssetFile const& file) {
 	// Write metadata
 	out.write(file.type, sizeof(file.type));
 	uint32_t version = file.version;
-	out.write(reinterpret_cast<const char*>(&version), sizeof(uint32_t));
+	out.write(&version, 1);
 
 	uint32_t json_length = file.metadata_json.size();
-	out.write(reinterpret_cast<const char*>(&json_length), sizeof(uint32_t));
+	out.write(&json_length, 1);
 
 	uint32_t binary_length = file.binary_blob.size();
-	out.write(reinterpret_cast<const char*>(&binary_length), sizeof(uint32_t));
+	out.write(&binary_length, 1);
 
 	// Write json
 	out.write(file.metadata_json.data(), json_length);
@@ -41,17 +38,12 @@ bool save_binary_file(std::string_view path, AssetFile const& file) {
 	return true;
 }
 
-bool load_binary_file(std::string_view path, AssetFile& file) {
-	std::ifstream in(path.data(), std::ios::in | std::ios::binary);
-	if (!in.good()) return false;
-
-	in.seekg(0);
-
+bool load_binary_file(plib::binary_input_stream& in, AssetFile& file) {
 	in.read(file.type, sizeof(file.type));
-	in.read(reinterpret_cast<char*>(&file.version), sizeof(uint32_t));
+	in.read(&file.version, 1);
 	uint32_t json_length, binary_length;
-	in.read(reinterpret_cast<char*>(&json_length), sizeof(uint32_t));
-	in.read(reinterpret_cast<char*>(&binary_length), sizeof(uint32_t));
+	in.read(&json_length, 1);
+	in.read(&binary_length, 1);
 
 	file.metadata_json.resize(json_length);
 	file.binary_blob.resize(binary_length);
