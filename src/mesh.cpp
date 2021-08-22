@@ -122,6 +122,7 @@ AssetFile pack_mesh(MeshInfo const& info, void* vertices, void* indices) {
 	else if (info.compression == CompressionMode::None) {
 		// No compression, just two raw memcpy() calls
 		file.binary_blob.resize(vtx_byte_size + idx_byte_size);
+		json["index_binary_offset"] = vtx_byte_size;
 		memcpy(file.binary_blob.data(), reinterpret_cast<const char*>(vertices), vtx_byte_size);
 		memcpy(file.binary_blob.data() + vtx_byte_size, reinterpret_cast<const char*>(indices), idx_byte_size);
 	}
