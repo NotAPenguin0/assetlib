@@ -30,7 +30,7 @@ inline constexpr uint8_t patch_version(uint32_t version) {
 	return version & 0xFF;
 }
 
-constexpr uint32_t itex_version = pack_version(1, 0, 0);
-constexpr uint32_t mesh_version = pack_version(0, 0, 1);
+constexpr uint32_t itex_version = pack_version(1, 0, 1);
+constexpr uint32_t mesh_version = pack_version(1, 0, 0);
 
 }

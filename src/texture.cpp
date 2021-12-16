@@ -6,15 +6,16 @@
 
 namespace assetlib {
 
-//	Current texture parser version 1.0.0 has the following required fields:
+//	Current texture parser version 1.0.1 has the following required fields:
 //	format: a string containing the texture format. Has to be RGBA8
-//	color_space: a string containing the color space. Has to be either SRGB or RGB.
 //	extents: an object with 2 required fields
 //		x: the width of the texture
 //		y: the height of the texture
 //	byte_size: the size in bytes of texture after decompression
 //	compression_mode: String with the compression mode used. "None" for no compression, "LZ4" for LZ4 compression.
 //	mip_levels: amount of mip levels stored in the file.
+// Following fields are optional
+// color_space: a string containing the color space. Has to be either sRGB or RGB. (default value is RGB)
 
 static TextureFormat parse_texture_format(std::string const& fmt_string) {
 	if (fmt_string == "RGBA8") { return TextureFormat::RGBA8; }
@@ -31,7 +32,7 @@ static std::string format_to_string(TextureFormat format) {
 }
 
 static ColorSpace parse_color_space(std::string const& space) {
-	if (space == "SRGB") { return ColorSpace::sRGB; }
+	if (space == "sRGB") { return ColorSpace::sRGB; }
 	if (space == "RGB") { return ColorSpace::RGB; }
 	return ColorSpace::Unknown;
 }
@@ -39,7 +40,7 @@ static ColorSpace parse_color_space(std::string const& space) {
 static std::string colorspace_to_string(ColorSpace space) {
 	switch (space) {
 	case ColorSpace::sRGB:
-		return "SRGB";
+		return "sRGB";
 	case ColorSpace::RGB:
 		return "RGB";
 	default:
@@ -61,6 +62,9 @@ TextureInfo read_texture_info(AssetFile const& file) {
 	info.extents[1] = extents["y"].ToInt();
 	info.byte_size = json["byte_size"].ToInt();
 	info.mip_levels = json["mip_levels"].ToInt();
+
+    if (json.hasKey("color_space")) info.colorspace = parse_color_space(json["colorspace"].ToString());
+    else info.colorspace = ColorSpace::RGB;
 
 	return info;
 }
@@ -85,6 +89,7 @@ AssetFile pack_texture(TextureInfo const& info, void* pixel_data) {
 	json["extents"]["y"] = info.extents[1];
 	json["byte_size"] = info.byte_size;
 	json["mip_levels"] = info.mip_levels;
+    json["color_space"] = info.colorspace;
 
 	// File header
 	file.type[0] = 'I';

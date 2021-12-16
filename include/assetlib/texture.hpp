@@ -19,6 +19,7 @@ enum class ColorSpace {
 struct TextureInfo {
 	uint64_t byte_size = 0;
 	TextureFormat format = TextureFormat::Unknown;
+    ColorSpace colorspace = ColorSpace::Unknown;
 	CompressionMode compression;
 	uint32_t extents[3]{ 0, 0, 0 };
 	uint32_t mip_levels = 0;
