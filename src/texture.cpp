@@ -24,6 +24,12 @@ static TextureFormat parse_texture_format(std::string const& fmt_string) {
 
 static std::string format_to_string(TextureFormat format) {
 	switch (format) {
+    case TextureFormat::R8:
+        return "R8";
+    case TextureFormat::RG8:
+        return "RG8";
+    case TextureFormat::RGB8:
+        return "RGB8";
 	case TextureFormat::RGBA8:
 		return "RGBA8";
 	default:
