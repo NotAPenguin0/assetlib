@@ -41,8 +41,6 @@ static uint32_t vertex_byte_size(VertexFormat format) {
 }
 
 MeshInfo read_mesh_info(AssetFile const& file) {
-	assert(file.version == mesh_version && "file version mismatches parser version");
-
 	MeshInfo info{};
 	json::JSON json = json::JSON::Load(file.metadata_json);
 
