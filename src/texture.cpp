@@ -19,6 +19,9 @@ namespace assetlib {
 
 static TextureFormat parse_texture_format(std::string const& fmt_string) {
 	if (fmt_string == "RGBA8") { return TextureFormat::RGBA8; }
+    if (fmt_string == "RGB8") { return TextureFormat::RGB8; }
+    if (fmt_string == "RG8") { return TextureFormat::RG8; }
+    if (fmt_string == "R8") { return TextureFormat::R8; }
 	return TextureFormat::Unknown;
 }
 
@@ -69,7 +72,7 @@ TextureInfo read_texture_info(AssetFile const& file) {
 	info.byte_size = json["byte_size"].ToInt();
 	info.mip_levels = json["mip_levels"].ToInt();
 
-    if (json.hasKey("color_space")) info.colorspace = parse_color_space(json["colorspace"].ToString());
+    if (json.hasKey("color_space")) info.colorspace = parse_color_space(json["color_space"].ToString());
     else info.colorspace = ColorSpace::RGB;
 
 	return info;
