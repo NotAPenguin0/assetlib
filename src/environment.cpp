@@ -49,16 +49,15 @@ AssetFile pack_environment(EnvironmentInfo const& info, void* hdr, void* irradia
     json["hdr_bytes"] = info.hdr_bytes;
     json["irradiance_size"] = info.irradiance_size;
     json["irradiance_bytes"] = info.irradiance_bytes;
-    json["irradiance_offset"] = info.hdr_bytes;
     json["specular_size"] = info.specular_size;
     json["specular_bytes"] = info.specular_bytes;
-    json["specular_offset"] = info.irradiance_offset + info.irradiance_bytes;
 
     // Compress the data pointers into the final binary blob
     int staging_size = LZ4_compressBound(info.hdr_bytes);
     file.binary_blob.resize(staging_size);
     int compressed_size = LZ4_compress_default(reinterpret_cast<const char*>(hdr), file.binary_blob.data(), info.hdr_bytes, staging_size);
     int offset = compressed_size;
+    json["irradiance_offset"] = offset;
     file.binary_blob.resize(compressed_size);
     // Compress again, this time at offset compressed_size in the file binary blob
     staging_size = LZ4_compressBound(info.irradiance_bytes);
@@ -66,6 +65,7 @@ AssetFile pack_environment(EnvironmentInfo const& info, void* hdr, void* irradia
     int compressed_irr_size = LZ4_compress_default(reinterpret_cast<const char*>(irradiance), file.binary_blob.data() + offset, info.irradiance_bytes, staging_size);
     file.binary_blob.resize(compressed_irr_size + offset);
     offset += compressed_irr_size;
+    json["specular_offset"] = offset;
     // And again for specular, but now at offset compressed_irr_size + compressed_size
     staging_size = LZ4_compressBound(info.specular_bytes);
     file.binary_blob.resize(offset + staging_size);
