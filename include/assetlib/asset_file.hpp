@@ -22,6 +22,7 @@ struct AssetFile {
 	// Possible values are:
 	// ITEX for textures
 	// MESH for meshes
+    // IENV for environments
 	char type[4];
 	// Version of the binary file format.
 	uint32_t version;
